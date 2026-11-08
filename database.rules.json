@@ -1,0 +1,117 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "staff": {
+      ".read": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true && root.child('staff/'+auth.uid+'/role').val() === 'admin'",
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true && root.child('staff/'+auth.uid+'/role').val() === 'admin'",
+        ".validate": "newData.hasChildren(['name','username','role','branch','active']) && (newData.child('role').val() === 'admin' || newData.child('role').val() === 'agent') && newData.child('active').isBoolean() && newData.child('username').val().matches(/^[a-z0-9_]{3,20}$/)"
+      }
+    },
+    "branches": {
+      ".read": true,
+      "$c": {
+        ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true && root.child('staff/'+auth.uid+'/role').val() === 'admin'",
+        ".validate": "!newData.exists() || (newData.hasChildren(['name','code','prefix']) && newData.child('code').val() === $c && $c.matches(/^[A-Z0-9]{2,5}$/))"
+      }
+    },
+    "prices": {
+      ".read": true,
+      "$p": {
+        ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true && root.child('staff/'+auth.uid+'/role').val() === 'admin'",
+        ".validate": "!newData.exists() || (newData.hasChildren(['name','unit','price']) && newData.child('price').isNumber())"
+      }
+    },
+    "settings": {
+      ".read": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true",
+      ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true && root.child('staff/'+auth.uid+'/role').val() === 'admin'"
+    },
+    "shipments": {
+      ".read": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true && root.child('staff/'+auth.uid+'/role').val() === 'admin' || (auth != null && root.child('staff/'+auth.uid+'/active').val() === true && (query.orderByChild === 'from' || query.orderByChild === 'to') && query.equalTo === root.child('staff/'+auth.uid+'/branch').val())",
+      ".indexOn": [
+        "created",
+        "from",
+        "to",
+        "status"
+      ],
+      "$no": {
+        ".read": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true",
+        ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true && root.child('staff/'+auth.uid+'/role').val() === 'admin' || (auth != null && root.child('staff/'+auth.uid+'/active').val() === true && newData.exists() && (data.exists() || newData.child('from').val() === root.child('staff/'+auth.uid+'/branch').val()))",
+        ".validate": "$no.matches(/^[A-Z0-9]{2,5}-[0-9]{6}-[0-9]{4,}$/) && newData.hasChildren(['from','to','status','created']) && (!data.exists() || newData.child('created').val() === data.child('created').val())",
+        "status": {
+          ".validate": "newData.isString() && newData.val().matches(/^(posted|shipping|transit|arrived|delivered|returned|problem)$/)"
+        },
+        "hist": {
+          "$h": {
+            ".validate": "newData.hasChildren(['s','at']) && newData.child('s').val().matches(/^(posted|shipping|transit|arrived|delivered|returned|problem)$/) && (!newData.child('ev').exists() || newData.child('ev').val().matches(/^(call_ok|call_no|dest)$/))"
+          }
+        }
+      }
+    },
+    "track": {
+      "$no": {
+        ".read": true,
+        ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true",
+        ".validate": "!newData.exists() || newData.hasChildren(['status','from','to'])",
+        "status": {
+          ".validate": "newData.isString() && newData.val().matches(/^(posted|shipping|transit|arrived|delivered|returned|problem)$/)"
+        }
+      }
+    },
+    "counters": {
+      "$p": {
+        "$d": {
+          ".read": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true",
+          ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true",
+          ".validate": "newData.isNumber() && newData.val() === (data.exists() ? data.val() : 0) + 1"
+        }
+      }
+    },
+    "customers": {
+      "$u": {
+        ".read": "auth != null && auth.uid === $u",
+        ".write": "auth != null && auth.uid === $u && !data.exists()",
+        ".validate": "newData.hasChildren(['phone']) && newData.child('phone').val().matches(/^0[0-9]{7,10}$/) && auth.token.email === 'c' + newData.child('phone').val() + '@cust.cambodiainsight.com'"
+      }
+    },
+    "custIdx": {
+      "$p": {
+        ".read": "auth != null && root.child('customers/'+auth.uid+'/phone').val() === $p",
+        "$no": {
+          ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true"
+        }
+      }
+    },
+    "custNote": {
+      "$p": {
+        ".read": "auth != null && root.child('customers/'+auth.uid+'/phone').val() === $p",
+        "$k": {
+          ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true",
+          "seen": {
+            ".write": "auth != null && root.child('customers/'+auth.uid+'/phone').val() === $p",
+            ".validate": "newData.isBoolean()"
+          }
+        }
+      }
+    },
+    "callReq": {
+      "$no": {
+        ".write": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true",
+        ".validate": "!newData.exists() || newData.hasChildren(['at','by'])"
+      }
+    },
+    "callLog": {
+      ".read": "auth != null && root.child('staff/'+auth.uid+'/active').val() === true && root.child('staff/'+auth.uid+'/role').val() === 'admin'",
+      ".indexOn": [
+        "at"
+      ]
+    },
+    "callQueue": {
+      ".indexOn": [
+        "next"
+      ]
+    }
+  }
+}
