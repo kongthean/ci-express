@@ -15,7 +15,7 @@ window.CI_CONFIG = {
   },
 
   // 2) Your website address (used in QR codes on labels)
-  site: "https://cambodiainsight.com",
+  site: "https://cambodiainsight.net",
 
   // 3) Login domain. Staff log in as  username@staff.<loginDomain>
   //    and customers as  c<phone>@cust.<loginDomain>.
