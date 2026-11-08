@@ -3,33 +3,49 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#C8102E">
+<meta name="theme-color" content="#16161D">
 <meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="CI Express – Track your parcel">
+<meta name="apple-mobile-web-app-title" content="CI Express HQ">
 <meta name="format-detection" content="telephone=no">
-<title>CI Express – Track your parcel</title>
-<link rel="manifest" href="/customer/manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
-<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<title>CI Express HQ</title>
+<link rel="manifest" href="/manifest-admin.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="/assets/app.css?v=1">
+<link rel="stylesheet" href="/app.css?v=2">
 </head>
-<body data-app="customer">
+<body data-app="admin">
+<div id="app"></div>
 <noscript>Please turn on JavaScript.</noscript>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<script src="/assets/config.js?v=1"></script>
-<script src="/assets/i18n.js?v=1"></script>
-<script src="/assets/core.js?v=1"></script>
-<script src="/assets/customer.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script src="/config.js?v=2"></script>
+<script src="/i18n.js?v=2"></script>
+<script src="/core.js?v=2"></script>
+<script src="/staff.js?v=2"></script>
+<script src="/admin.js?v=2"></script>
+<script>
+Staff.define([
+  { id: 'dash', icon: 'home', t: 'navDash', tab: true },
+  { id: 'scan', icon: 'scan', t: 'navScan', tab: true },
+  { id: 'new', icon: 'plus', t: 'navNew', tab: true },
+  { id: 'ship', icon: 'box', t: 'navShip', tab: true },
+  { id: 'calls', icon: 'phone', t: 'navCalls' },
+  { id: 'branches', icon: 'building', t: 'navBranches2' },
+  { id: 'prices', icon: 'tag', t: 'navPrices2' },
+  { id: 'staff', icon: 'users', t: 'navStaff' },
+  { id: 'reports', icon: 'chart', t: 'navReports' },
+  { id: 'account', icon: 'user', t: 'navAccount2' }
+]);
+Staff.boot();
+</script>
 </body>
 </html>

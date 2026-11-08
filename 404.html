@@ -1,2 +1,2 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CI Express</title>
-<script>var p=location.pathname;location.replace(p.indexOf('/agent')===0?'/agent/':p.indexOf('/customer')===0||p.indexOf('/track')===0?'/customer/'+location.search:'/');</script></head><body></body></html>
+<script>var p=location.pathname.toLowerCase();location.replace(p.indexOf('/agent')===0?'/agent':(p.indexOf('/customer')===0||p.indexOf('/track')===0)?'/customer'+location.search:'/');</script></head><body></body></html>

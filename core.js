@@ -56,7 +56,7 @@
     s = String(s || '').trim(); var m = s.match(/[?&]no=([A-Za-z0-9-]+)/); if (m) s = m[1];
     s = s.toUpperCase(); return CI.NO_RE.test(s) ? s : '';
   };
-  CI.trackUrl = function (no) { return (CFG.site || location.origin) + '/customer/?no=' + encodeURIComponent(no); };
+  CI.trackUrl = function (no) { return (CFG.site || location.origin) + '/customer?no=' + encodeURIComponent(no); };
 
   /* ---------- statuses ---------- */
   CI.STATUSES = ['posted', 'shipping', 'transit', 'arrived', 'delivered', 'returned', 'problem'];

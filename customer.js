@@ -6,9 +6,9 @@
   var ME = null, NOTES = {}, IDX = {}, refs = [], meMode = 'login';
 
   function shell() {
-    document.body.innerHTML = '<div class="c-hero"><div class="bar"><div class="in"><a class="logo" href="/customer/"><div class="m">CI</div><div><b>CI Express</b></div></a><nav class="c-nav">' +
+    document.body.innerHTML = '<div class="c-hero"><div class="bar"><div class="in"><a class="logo" href="/customer"><div class="m">CI</div><div><b>CI Express</b></div></a><nav class="c-nav">' +
       VIEWS.map(function (v) { return '<button data-v="' + v.id + '">' + E(t(v.t)) + '</button>'; }).join('') + '</nav>' + CI.langSelect() + '</div></div>' +
-      '<div class="in mob"><div class="row"><a class="logo" href="/customer/"><div class="m">CI</div><div><b>CI Express</b><span>' + E((CI.cfg.site || '').replace(/^https?:\/\//, '')) + '</span></div></a><div class="grow"></div>' + CI.langSelect() + '</div></div>' +
+      '<div class="in mob"><div class="row"><a class="logo" href="/customer"><div class="m">CI</div><div><b>CI Express</b><span>' + E((CI.cfg.site || '').replace(/^https?:\/\//, '')) + '</span></div></a><div class="grow"></div>' + CI.langSelect() + '</div></div>' +
       '<div class="in txt"><h1 id="hT"></h1><p id="hS"></p></div></div><main class="c-wrap" id="cv"></main>' +
       '<nav class="tabs">' + VIEWS.map(function (v) { return '<button data-v="' + v.id + '">' + I(v.icon) + '<span>' + E(t(v.t)) + '</span>' + (v.id === 'account' ? '<span class="bd hide" id="nb">0</span>' : '') + '</button>'; }).join('') + '</nav>' +
       '<div id="scanOv" class="ov hide" style="align-items:center;flex-direction:column;gap:14px;padding:16px;background:rgba(15,15,20,.94)"><div style="color:#fff;font-weight:700;text-align:center">' + E(t('scanTitle')) + '</div><div class="cam" style="width:100%;max-width:420px"><div id="reader"></div></div><div id="scanMsg" style="color:#FECACA;font-weight:700;text-align:center;min-height:20px"></div><button class="btn line" id="scanX">' + E(t('close')) + '</button></div>';
@@ -23,7 +23,7 @@
     var ht = { track: desk ? 'cHeroDesk' : 'cTitle', branches: 'brTitle', prices: 'prTitle', account: 'acTitle' }[id], hs = { track: 'cSub', branches: 'brSub', prices: 'prSub', account: 'acSub' }[id];
     $('hT').textContent = t(ht); $('hS').textContent = t(hs);
     if (!keepScroll) window.scrollTo(0, 0);
-    try { history.replaceState(null, '', '/customer/' + (id === 'track' ? (lastNo ? '?no=' + lastNo : '') : '#' + id)); } catch (e) {}
+    try { history.replaceState(null, '', '/customer' + (id === 'track' ? (lastNo ? '?no=' + lastNo : '') : '#' + id)); } catch (e) {}
     ({ track: vTrack, branches: vBranches, prices: vPrices, account: vAccount })[id]($('cv'));
   }
   CI.onLang(function () { shell(); go(cur, true); });
@@ -48,7 +48,7 @@
     if (!CI.ready) { msg('notReady'); return; }
     if (!CI.NO_RE.test(no)) { msg('notFound'); return; }
     lastNo = no; if ($('no')) $('no').value = no;
-    try { history.replaceState(null, '', '/customer/?no=' + no); } catch (e) {}
+    try { history.replaceState(null, '', '/customer?no=' + no); } catch (e) {}
     $('res').innerHTML = '<div class="card raise"><div class="muted">' + E(t('working')) + '</div></div>';
     Promise.all([CI.db.ref('track/' + no).once('value'), loadBr()]).then(function (a) { var r = a[0].val(); if (!r) msg('notFound'); else { lastRec = r; show(no, r); } }).catch(function () { msg('netErr'); });
   }
