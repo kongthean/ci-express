@@ -1,13 +1,13 @@
 {
-  "id": "/",
-  "name": "CI Express Headquarters",
-  "short_name": "CI HQ",
-  "start_url": "/",
-  "scope": "/",
+  "id": "/agent/",
+  "name": "CI Express Agent",
+  "short_name": "CI Agent",
+  "start_url": "/agent/",
+  "scope": "/agent/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#F5F5F7",
-  "theme_color": "#16161D",
+  "theme_color": "#C8102E",
   "icons": [
     {
       "src": "/icons/icon-192.png",
