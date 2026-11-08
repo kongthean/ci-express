@@ -9,16 +9,21 @@
   function loginScreen(msg) {
     root.innerHTML = '<div class="login"><div class="hero' + (APP === 'admin' ? ' dark' : '') + '"><div class="m">CI</div><h1>CI Express</h1><div style="opacity:.85;margin-top:4px">' + E(t(APP === 'admin' ? 'roleAdmin' : 'roleAgent')) + '</div></div>' +
       '<form class="box" id="lf" autocomplete="on"><div class="row sp" style="margin-bottom:14px"><h2>' + E(t('loginStaff')) + '</h2>' + CI.langSelect('langsel lang-dark') + '</div>' +
-      '<div class="fld"><label class="f" for="lu">' + E(t('username')) + '</label><input id="lu" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required></div>' +
+      '<div class="fld"><label class="f" for="lu">' + E(t('userOrEmail')) + '</label><input id="lu" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required></div>' +
       '<div class="fld"><label class="f" for="lp">' + E(t('password')) + '</label><input id="lp" name="password" type="password" autocomplete="current-password" required></div>' +
-      '<div class="err" id="le">' + E(msg || (CI.ready ? '' : t('notReady'))) + '</div><button class="btn block" id="lb" type="submit">' + E(t('login')) + '</button></form></div>';
+      '<div class="err" id="le">' + E(msg || (CI.ready ? '' : t('notReady'))) + '</div><button class="btn block" id="lb" type="submit">' + E(t('login')) + '</button><button class="btn block" type="button" id="lfg" style="background:none;color:#C8102E;margin-top:6px">' + E(t('forgot')) + '</button></form></div>';
     var ls = root.querySelector('.lang-dark'); ls.style.cssText = 'background-color:#fff;color:#16161D;border-color:#E4E4EA'; ls.value = CI.lang();
+    document.getElementById('lfg').onclick = function () {
+      var u = document.getElementById('lu').value.trim().toLowerCase(), le = document.getElementById('le');
+      if (u.indexOf('@') < 1) { le.textContent = t('forgotHint'); return; }
+      CI.auth.sendPasswordResetEmail(u).then(function () { le.textContent = ''; CI.toast(t('forgotSent'), 'ok'); }).catch(function () { le.textContent = t('failed'); });
+    };
     document.getElementById('lf').onsubmit = function (e) {
       e.preventDefault(); if (!CI.ready) return;
-      var u = document.getElementById('lu').value.trim().toLowerCase(), p = document.getElementById('lp').value, b = document.getElementById('lb');
-      if (!/^[a-z0-9_]{3,20}$/.test(u) || p.length < 6) { document.getElementById('le').textContent = t('errLogin'); return; }
+      var u = document.getElementById('lu').value.trim().toLowerCase(), p = document.getElementById('lp').value, b = document.getElementById('lb'), isMail = u.indexOf('@') > 0;
+      if ((!isMail && !/^[a-z0-9_]{3,20}$/.test(u)) || p.length < 6) { document.getElementById('le').textContent = t('errLogin'); return; }
       CI.busy(b, true, t('loggingIn'));
-      CI.auth.signInWithEmailAndPassword(CI.staffEmail(u), p).catch(function (er) {
+      CI.auth.signInWithEmailAndPassword(isMail ? u : CI.staffEmail(u), p).catch(function (er) {
         CI.busy(b, false); document.getElementById('le').textContent = er && er.code === 'auth/network-request-failed' ? t('netErr') : t('errLogin');
       });
     };
